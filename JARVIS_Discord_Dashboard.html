@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS | Discord Control Panel</title>
+<style>
+:root{--bg:#080b10;--panel:#101720;--panel2:#0c121a;--gold:#ffb547;--gold2:#ff8c24;--text:#eaf0f6;--muted:#91a0af;--line:rgba(255,181,71,.22);--green:#5fe0a0;--red:#ff7272}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#34200d 0,transparent 32%),linear-gradient(145deg,#070a0f,#0b1119 60%,#100d09);color:var(--text);font:15px/1.5 "Segoe UI",Arial,sans-serif;min-height:100vh}
+header{padding:24px clamp(18px,5vw,64px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:14px}.orb{width:44px;height:44px;border:1px solid var(--gold);border-radius:50%;box-shadow:0 0 18px #ffad3b66,inset 0 0 15px #ffad3b33;position:relative}.orb:before,.orb:after{content:"";position:absolute;border:1px solid var(--gold);border-radius:50%;inset:7px}.orb:after{inset:15px;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+h1{font-size:19px;letter-spacing:4px;margin:0;color:var(--gold)}.sub{font-size:11px;color:var(--muted);letter-spacing:2px}
+main{max-width:1100px;margin:38px auto;padding:0 20px}.hero{margin-bottom:28px}.eyebrow{color:var(--gold);font-size:11px;letter-spacing:3px;text-transform:uppercase}.hero h2{font-size:clamp(27px,4vw,40px);line-height:1.12;margin:8px 0}.hero p{color:var(--muted);max-width:720px;margin:0}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{background:linear-gradient(160deg,#131c27ee,#0c121aee);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 15px 45px #0005}.card h3{font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin:0 0 18px}
+label{display:block;color:#b8c4d0;font-size:12px;margin:14px 0 6px}input{width:100%;background:#080e15;border:1px solid #293746;border-radius:9px;padding:12px;color:var(--text);outline:none}input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #ffb54718}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.btn{border:1px solid var(--gold);border-radius:9px;background:linear-gradient(120deg,#ffb547,#f28a24);color:#17100a;font-weight:700;padding:11px 16px;cursor:pointer}.btn.secondary{background:transparent;color:var(--gold)}.btn:hover{filter:brightness(1.08)}
+.status{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;margin:12px 0}.dot{width:9px;height:9px;border-radius:50%;background:#647282;box-shadow:0 0 8px currentColor}.dot.good{background:var(--green);color:var(--green)}.dot.bad{background:var(--red);color:var(--red)}
+.metric{padding:14px;background:#080e15;border:1px solid #263443;border-radius:11px;margin-top:12px}.metric small{color:var(--muted);display:block}.metric strong{font-size:14px;overflow-wrap:anywhere}
+.steps{counter-reset:step;list-style:none;padding:0;margin:0}.steps li{counter-increment:step;position:relative;padding:0 0 18px 42px;color:#c2ccd6}.steps li:before{content:counter(step);position:absolute;left:0;top:0;width:27px;height:27px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:12px}.steps b{color:var(--text)}code{color:#ffd18a;background:#080e15;padding:2px 5px;border-radius:4px}
+.notice{border-left:3px solid var(--gold);background:#ffb5470d;padding:12px 14px;border-radius:0 8px 8px 0;color:#c8d0d9;font-size:13px;margin-top:18px}
+footer{text-align:center;color:#647282;font-size:11px;padding:35px 15px;letter-spacing:1px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}header{align-items:flex-start}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="orb"></div><div><h1>J.A.R.V.I.S.</h1><div class="sub">DISCORD CONTROL SYSTEM</div></div></div>
+ <div class="sub">PERSONAL AI INTERFACE</div>
+</header>
+<main>
+ <section class="hero">
+  <div class="eyebrow">System console / Discord integration</div>
+  <h2>At your service, Sir.</h2>
+  <p>Configure the public URL of your JARVIS Discord interactions service and check whether its backend is reachable.</p>
+ </section>
+ <div class="grid">
+  <section class="card">
+   <h3>Connection diagnostics</h3>
+   <label for="endpoint">Backend base URL</label>
+   <input id="endpoint" type="url" placeholder="https://your-service.example.com">
+   <div class="row" style="margin-top:14px">
+    <button class="btn" id="check">Check connection</button>
+    <button class="btn secondary" id="save">Save URL</button>
+   </div>
+   <div class="status"><span class="dot" id="dot"></span><span id="status">Awaiting connection test</span></div>
+   <div class="metric"><small>Discord Interactions Endpoint URL</small><strong id="fullurl">https://your-domain/api/discord/interactions</strong></div>
+   <div class="notice">This page is a dashboard only. It cannot receive Discord's signed interaction POST requests by itself. A backend service (such as the supplied Python FastAPI project) must remain online at the endpoint URL.</div>
+  </section>
+  <section class="card">
+   <h3>Deployment checklist</h3>
+   <ol class="steps">
+    <li><b>Deploy the backend</b><br>Run the JARVIS FastAPI service on a host with a public HTTPS address.</li>
+    <li><b>Configure secrets on the host</b><br>Set the Discord public key, application ID, bot token, and AI provider credentials as environment variables. Never put tokens in this HTML page.</li>
+    <li><b>Register the slash command</b><br>Run the backend project's <code>register_command.py</code> with its configured environment.</li>
+    <li><b>Set Discord's endpoint</b><br>In Developer Portal, use the exact interactions URL shown on the left.</li>
+    <li><b>Validate</b><br>Discord sends a signed PING request. The backend must verify the signature and return the PONG response.</li>
+   </ol>
+  </section>
+ </div>
+ <section class="card" style="margin-top:18px">
+  <h3>Endpoint reference</h3>
+  <div class="metric"><small>Required route</small><strong>POST /api/discord/interactions</strong></div>
+  <div class="metric"><small>Health check</small><strong>GET /</strong></div>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:0">The health check only confirms that the backend responds. It does not verify Discord signature validation, slash-command registration, or the AI provider connection.</p>
+ </section>
+</main>
+<footer>JARVIS CONTROL INTERFACE · SECURE CONFIGURATION REQUIRED</footer>
+<script>
+const endpoint=document.getElementById('endpoint'),fullurl=document.getElementById('fullurl'),status=document.getElementById('status'),dot=document.getElementById('dot');
+function clean(){return endpoint.value.trim().replace(/\/+$/,'')}
+function update(){const base=clean();fullurl.textContent=base?base+'/api/discord/interactions':'https://your-domain/api/discord/interactions'}
+endpoint.addEventListener('input',update);
+document.getElementById('save').addEventListener('click',()=>{const base=clean();if(!base){status.textContent='Enter a backend URL first.';return}try{const u=new URL(base);if(u.protocol!=='https:')throw Error();localStorage.setItem('jarvisDiscordBackend',base);status.textContent='Backend URL saved in this browser.';dot.className='dot good'}catch(e){status.textContent='Enter a valid public HTTPS URL.';dot.className='dot bad'}});
+document.getElementById('check').addEventListener('click',async()=>{const base=clean();if(!base){status.textContent='Enter your backend URL first.';return}let u;try{u=new URL(base);if(u.protocol!=='https:')throw Error()}catch(e){status.textContent='Enter a valid public HTTPS URL.';dot.className='dot bad';return}
+status.textContent='Checking backend…';dot.className='dot';
+try{const r=await fetch(base+'/',{method:'GET'});if(!r.ok)throw Error('HTTP '+r.status);status.textContent='Backend responded successfully (HTTP '+r.status+').';dot.className='dot good'}catch(e){status.textContent='Could not reach backend: '+e.message+'. Check hosting, URL, and CORS settings.';dot.className='dot bad'}});
+try{const saved=localStorage.getItem('jarvisDiscordBackend');if(saved){endpoint.value=saved;update()}}catch(e){}
+</script>
+</body>
+</html>
